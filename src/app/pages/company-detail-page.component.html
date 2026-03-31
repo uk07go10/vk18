@@ -1,0 +1,81 @@
+<ng-container *ngIf="company">
+  <div class="ph">
+    <div>
+      <div class="pt">{{ company.title }}</div>
+      <div class="ps"><span class="code">{{ company.subtitle }}</span></div>
+    </div>
+    <div class="action-row">
+      <button class="btn" type="button">Top up pool</button>
+      <button class="btn danger-text" type="button">Suspend</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="card">
+      <div class="ct">Pool status</div>
+      <div class="usage-row">
+        <span class="usage-label">Used</span>
+        <span class="usage-summary">{{ company.usageLabel }}</span>
+      </div>
+      <div class="pb company-progress">
+        <div class="pf" [ngClass]="company.usageProgressClass" [style.width.%]="company.usagePercent"></div>
+      </div>
+      <div class="sub-emphasis">{{ company.remainingLabel }}</div>
+
+      <div class="mt-12">
+        <div class="dr" *ngFor="let row of company.poolRows">
+          <span class="dl">{{ row.label }}</span>
+          <span class="dv">{{ row.value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ct">Company info</div>
+      <div class="dr" *ngFor="let row of company.companyRows">
+        <span class="dl">{{ row.label }}</span>
+        <span class="dv" [ngClass]="row.valueClass || ''">{{ row.value }}</span>
+      </div>
+
+      <div class="action-row mt-10">
+        <button class="btn grow" type="button">Edit rules</button>
+        <button class="btn grow" type="button">Email HR</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-header">
+      <div class="ct mb-0">Employee booking log</div>
+      <button class="btn btn-sm" type="button">Export CSV</button>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Session</th>
+            <th>Booking ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of company.bookingLog">
+            <td>
+              <div class="table-strong">{{ log.employeeName }}</div>
+              <div class="table-sub">{{ log.employeeEmail }}</div>
+            </td>
+            <td class="table-sub">{{ log.sessionName }}</td>
+            <td><span class="code">{{ log.bookingId }}</span></td>
+            <td class="strong-text text-br">{{ log.amountLabel }}</td>
+            <td class="table-sub">{{ log.dateLabel }}</td>
+            <td><span class="tag" [ngClass]="log.statusClass">{{ log.statusLabel }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

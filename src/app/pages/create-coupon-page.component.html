@@ -1,0 +1,122 @@
+<div class="ph">
+  <div>
+    <div class="pt">Create coupon</div>
+    <div class="ps">Fields highlighted in brown are new additions</div>
+  </div>
+</div>
+
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="ct">Step 1 — Coupon type</div>
+  <div class="type-row">
+    <button
+      *ngFor="let type of types"
+      class="tc btn-reset"
+      type="button"
+      [class.on]="selectedType === type.key"
+      (click)="selectType(type.key)"
+    >
+      <div class="tc-ico" [ngClass]="type.key">{{ type.icon }}</div>
+      <div class="tc-name">
+        {{ type.label }}
+        <span *ngIf="type.key === 'poo'" class="new-badge">new</span>
+      </div>
+      <div class="tc-desc">{{ type.description }}</div>
+    </button>
+  </div>
+
+  <div class="ct">Step 2 — Coupon details</div>
+
+  <div class="frow">
+    <div class="fg">
+      <label class="fl" for="coupon-code">Coupon code</label>
+      <input id="coupon-code" class="fi" formControlName="code" placeholder="e.g. NESTLECARE25" />
+      <span class="fhint">Leave blank to auto-generate</span>
+    </div>
+
+    <div class="fg" *ngIf="showValueField">
+      <label class="fl" for="coupon-value">{{ valueLabel }}</label>
+      <input id="coupon-value" class="fi" type="number" formControlName="discountValue" />
+    </div>
+  </div>
+
+  <div class="frow">
+    <div class="fg">
+      <label class="fl" for="expiry-date">Expiry date</label>
+      <input id="expiry-date" class="fi" type="date" formControlName="expiryDate" />
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="module-name">Module / session type</label>
+      <select id="module-name" class="fs" formControlName="moduleName">
+        <option *ngFor="let option of moduleOptions" [value]="option">{{ option }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="frow">
+    <div class="fg">
+      <label class="fl" for="assigned-to">Assigned to <span class="inline-muted">(user or company)</span></label>
+      <input id="assigned-to" class="fi" formControlName="assignedToName" placeholder="Name or company name" />
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="max-usage">Max usage count <span class="new-badge">new</span></label>
+      <input id="max-usage" class="fi-new" type="number" formControlName="maxUsageCount" placeholder="Leave blank = unlimited" />
+      <span class="fhint">Total times code can be used across all users</span>
+    </div>
+  </div>
+
+  <div *ngIf="showB2BFields">
+    <div class="strip in">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+      </svg>
+      These fields only appear for Full free and Balance pool — they link the coupon to a company.
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label class="fl" for="company-name">Company / org name <span class="new-badge">new</span></label>
+        <input id="company-name" class="fi-new" formControlName="companyName" placeholder="e.g. Nestle India Pvt Ltd" />
+      </div>
+
+      <div class="fg">
+        <label class="fl" for="hr-email">HR contact email <span class="new-badge">new</span></label>
+        <input id="hr-email" class="fi-new" type="email" formControlName="hrEmail" placeholder="hr@nestle.com" />
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fg">
+        <label class="fl" for="max-per-employee">Max per employee per session (₹) <span class="new-badge">new</span></label>
+        <input id="max-per-employee" class="fi-new" type="number" formControlName="maxPerEmployeePerSession" />
+      </div>
+
+      <div class="fg">
+        <label class="fl" for="max-sessions-per-employee">Max sessions per employee <span class="new-badge">new</span></label>
+        <input id="max-sessions-per-employee" class="fi-new" type="number" formControlName="maxSessionsPerEmployee" />
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showPoolField" class="fg fnew-wrap">
+    <label class="fl" for="pool-value">Total pool value (₹) <span class="new-badge">new</span></label>
+    <input id="pool-value" class="fi-new pool-input" type="number" formControlName="totalPoolValue" />
+    <span class="fhint">
+      All employees share this pool. Code becomes invalid when pool = ₹0 or expiry date passes, whichever comes first.
+    </span>
+  </div>
+
+  <div class="preview-card">
+    <div class="muted-label">Preview</div>
+    <div class="preview-code">{{ previewCode }}</div>
+    <div class="preview-desc">{{ previewDescription }}</div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn" type="button">Save as draft</button>
+    <button class="btn btn-p" type="submit" [disabled]="isSubmitting">
+      {{ isSubmitting ? 'Generating...' : 'Generate coupon' }}
+    </button>
+  </div>
+</form>

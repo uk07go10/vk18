@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.angular/
+.sass-cache/
+coverage/
+tmp/
+backend/**/bin/
+backend/**/obj/
+.DS_Store
+

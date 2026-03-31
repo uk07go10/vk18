@@ -1,0 +1,43 @@
+<div class="modal-bg" [class.open]="!!coupon" (click)="close()">
+  <div class="modal" *ngIf="coupon" (click)="$event.stopPropagation()">
+    <div class="mh">
+      <div>
+        <div class="mh-t">{{ coupon.code }} — coupon detail</div>
+        <div class="muted small-text">{{ coupon.subtitle }}</div>
+      </div>
+      <button class="x-btn" type="button" (click)="close()">✕</button>
+    </div>
+
+    <div class="mb">
+      <div class="coupon-banner">{{ coupon.code }}</div>
+
+      <div class="muted-label">Coupon info</div>
+      <div class="dr" *ngFor="let row of coupon.infoRows">
+        <span class="dl">{{ row.label }}</span>
+        <span class="dv" [ngClass]="row.valueClass || ''">
+          <span *ngIf="row.isBadge; else rowValue" class="tag" [ngClass]="row.badgeClass">{{ row.value }}</span>
+          <ng-template #rowValue>{{ row.value }}</ng-template>
+        </span>
+      </div>
+
+      <div class="muted-label mt-14">How it works at checkout</div>
+      <div class="strip ok">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+        {{ coupon.checkoutMessage }}
+      </div>
+      <div class="strip wa">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+        </svg>
+        {{ coupon.warningMessage }}
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" type="button">Edit rules</button>
+        <button class="btn btn-p" type="button">Top up pool</button>
+      </div>
+    </div>
+  </div>
+</div>

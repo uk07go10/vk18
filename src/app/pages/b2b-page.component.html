@@ -1,0 +1,48 @@
+<div class="ph">
+  <div>
+    <div class="pt">B2B companies</div>
+    <div class="ps">Balance pool and full-free coupons by company</div>
+  </div>
+  <a class="btn btn-p" routerLink="/create">+ New B2B coupon</a>
+</div>
+
+<div class="seg">
+  <button class="seg-b btn-reset" type="button" [class.on]="selectedView === 'pool'" (click)="selectView('pool')">
+    Balance pool
+  </button>
+  <button class="seg-b btn-reset" type="button" [class.on]="selectedView === 'free'" (click)="selectView('free')">
+    Full free
+  </button>
+</div>
+
+<div class="company-grid">
+  <a class="card company-card" *ngFor="let company of companies" [routerLink]="['/b2b', company.id]">
+    <div class="company-header">
+      <div>
+        <div class="company-name">{{ company.name }}</div>
+        <div class="company-sub"><span class="code">{{ company.code }}</span> · {{ company.subtitle }}</div>
+      </div>
+      <span class="tag" [ngClass]="company.statusClass">{{ company.statusLabel }}</span>
+    </div>
+
+    <div class="usage-row">
+      <span class="usage-label">Usage</span>
+      <span class="usage-summary">{{ company.progressLabel }}</span>
+    </div>
+    <div class="pb company-progress">
+      <div class="pf" [ngClass]="company.progressClass" [style.width.%]="company.progressPercent"></div>
+    </div>
+
+    <div class="company-footer">
+      <span>{{ company.footerLeft }}</span>
+      <span class="strong-text">{{ company.footerRight }}</span>
+    </div>
+
+    <div class="strip" *ngIf="company.alertMessage" [ngClass]="company.alertClass">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+      </svg>
+      {{ company.alertMessage }}
+    </div>
+  </a>
+</div>

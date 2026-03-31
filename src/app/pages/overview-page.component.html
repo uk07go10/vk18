@@ -1,0 +1,49 @@
+<ng-container *ngIf="dashboard$ | async as dashboard">
+  <div class="ph">
+    <div>
+      <div class="pt">Coupon overview</div>
+      <div class="ps">All types · last 30 days</div>
+    </div>
+    <button class="btn btn-p" type="button">Export CSV</button>
+  </div>
+
+  <div class="mrow">
+    <div class="mc" [ngClass]="card.accent" *ngFor="let card of dashboard.metricCards">
+      <div class="ml">{{ card.label }}</div>
+      <div class="mv">{{ card.value }}</div>
+      <div class="msb">{{ card.subtext }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Coupon types in use</div>
+    <div class="stack">
+      <div *ngFor="let usage of dashboard.usageBreakdown">
+        <div class="usage-row">
+          <span class="usage-label">
+            {{ usage.label }}
+            <span *ngIf="usage.highlightNew" class="new-badge">new</span>
+          </span>
+          <span class="usage-summary">{{ usage.summary }}</span>
+        </div>
+        <div class="pb">
+          <div class="pf" [ngClass]="usage.progressClass" [style.width.%]="usage.percent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Recent activity</div>
+    <div>
+      <div class="activity-row" *ngFor="let activity of dashboard.recentActivities; let last = last" [class.no-border]="last">
+        <div class="activity-avatar" [ngClass]="activity.avatarClass">{{ activity.initials }}</div>
+        <div class="activity-body">
+          <div class="activity-title">{{ activity.title }}</div>
+          <div class="activity-desc">{{ activity.description }}</div>
+        </div>
+        <span class="tag" [ngClass]="activity.tagClass">{{ activity.tagLabel }}</span>
+      </div>
+    </div>
+  </div>
+</ng-container>

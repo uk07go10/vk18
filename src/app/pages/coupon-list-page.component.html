@@ -1,0 +1,88 @@
+<div class="ph">
+  <div>
+    <div class="pt">All coupons</div>
+    <div class="ps">Filter and manage all coupon types</div>
+  </div>
+  <a class="btn btn-p" routerLink="/create">+ New</a>
+</div>
+
+<div class="toolbar-row">
+  <input
+    class="search-input"
+    [(ngModel)]="search"
+    (ngModelChange)="loadCoupons()"
+    placeholder="Search code, name, email..."
+  />
+
+  <select class="search-select" [(ngModel)]="selectedType" (ngModelChange)="loadCoupons()">
+    <option value="all">All types</option>
+    <option value="pct">Percentage</option>
+    <option value="fix">Fixed amount</option>
+    <option value="fre">Full free</option>
+    <option value="poo">Balance pool</option>
+  </select>
+
+  <select class="search-select" [(ngModel)]="selectedStatus" (ngModelChange)="loadCoupons()">
+    <option value="all">All status</option>
+    <option value="active">Active</option>
+    <option value="partiallyUsed">Partially used</option>
+    <option value="used">Used</option>
+    <option value="expiring">Expiring</option>
+    <option value="expired">Expired</option>
+  </select>
+</div>
+
+<div class="tbl-wrap" *ngIf="response as couponResponse">
+  <table>
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Type</th>
+        <th>Assigned to</th>
+        <th>Discount</th>
+        <th>Used / Limit</th>
+        <th>Expiry</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let coupon of couponResponse.items" (click)="openDetail(coupon.id)">
+        <td><span class="code">{{ coupon.code }}</span></td>
+        <td><span class="tag" [ngClass]="coupon.typeClass">{{ coupon.typeLabel }}</span></td>
+        <td>
+          <div class="table-strong">{{ coupon.assignedName }}</div>
+          <div class="table-sub">{{ coupon.assignedEmail }}</div>
+        </td>
+        <td>{{ coupon.discountLabel }}</td>
+        <td>
+          <div class="table-sub strong-text">{{ coupon.usageLabel }}</div>
+          <div class="pb short-progress">
+            <div class="pf" [ngClass]="coupon.usageProgressClass" [style.width.%]="coupon.usagePercent"></div>
+          </div>
+        </td>
+        <td [class.danger-text]="coupon.expiryTone === 'danger'" class="table-sub strong-when-danger">
+          {{ coupon.expiryLabel }}
+        </td>
+        <td><span class="tag" [ngClass]="coupon.statusClass">{{ coupon.statusLabel }}</span></td>
+        <td>
+          <div class="action-row">
+            <button class="btn btn-sm" type="button" (click)="$event.stopPropagation(); openDetail(coupon.id)">View</button>
+            <button class="btn btn-sm" type="button" *ngIf="coupon.canTopUp" (click)="$event.stopPropagation()">Top up</button>
+            <button class="btn btn-sm danger-text" type="button" *ngIf="coupon.canExpire" (click)="$event.stopPropagation()">Expire</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="list-footer" *ngIf="response as couponResponse">
+  <span>Showing {{ couponResponse.items.length }} of {{ couponResponse.totalCount }}</span>
+  <div class="action-row">
+    <button class="btn btn-sm" type="button">← Prev</button>
+    <button class="btn btn-p btn-sm" type="button">Next →</button>
+  </div>
+</div>
+
+<app-coupon-detail-modal [coupon]="selectedCoupon" (closed)="closeDetail()" />
